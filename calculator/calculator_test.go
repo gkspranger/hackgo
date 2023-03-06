@@ -105,3 +105,30 @@ func TestDivideInvalid(t *testing.T) {
 	}
 	RunFunctionInvalidTestCases(testCases, calculator.Divide, t)
 }
+
+func TestSqrt(t *testing.T) {
+	t.Parallel()
+	testCases := []testCase{
+		{a: 2, want: 4},
+		{a: 3, want: 9},
+		{a: 4, want: 16},
+		{a: 0.2, want: 0.04},
+	}
+	for _, tc := range testCases {
+		got, _ := calculator.Sqrt(tc.a)
+		if !closeEnough(tc.want, got, 0.001) {
+			t.Errorf("%s(%f): want %f, got %f",
+				"calculator.Sqrt", tc.a, tc.want, got)
+		}
+	}
+	invalidTestCases := []testCase{
+		{a: -3, want: 0},
+	}
+	for _, tc := range invalidTestCases {
+		_, err := calculator.Sqrt(tc.a)
+		if err == nil {
+			t.Errorf("%s(%f): want error for invalid input, got nil",
+				"calculator.Sqrt", tc.a)
+		}
+	}
+}
