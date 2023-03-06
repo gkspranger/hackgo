@@ -106,7 +106,7 @@ func TestDivideInvalid(t *testing.T) {
 	RunFunctionInvalidTestCases(testCases, calculator.Divide, t)
 }
 
-func TestSqrt(t *testing.T) {
+func TestValidSqrt(t *testing.T) {
 	t.Parallel()
 	testCases := []testCase{
 		{a: 2, want: 4},
@@ -121,6 +121,10 @@ func TestSqrt(t *testing.T) {
 				"calculator.Sqrt", tc.a, tc.want, got)
 		}
 	}
+}
+
+func TestInvalidSqrt(t *testing.T) {
+	t.Parallel()
 	invalidTestCases := []testCase{
 		{a: -3, want: 0},
 	}
