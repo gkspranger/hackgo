@@ -2,6 +2,7 @@ package calculator_test
 
 import (
 	"calculator"
+	"math"
 	"reflect"
 	"runtime"
 	"testing"
@@ -27,18 +28,33 @@ func RunFunctionTestCases(tcs []testCase, fn func(a, b float64) float64, t *test
 	}
 }
 
-func RunFunctionTestCasesWithErrors(tcs []testCase, fn func(a, b float64) (float64, error), t *testing.T) {
+func RunFunctionValidTestCases(tcs []testCase, fn func(a, b float64) (float64, error), t *testing.T) {
 	fnName := GetFunctionName(fn)
 	for _, tc := range tcs {
 		got, err := fn(tc.a, tc.b)
 		if err != nil {
 			t.Fatalf("want no error for valid input, got %v", err)
 		}
-		if tc.want != got {
+		if !closeEnough(tc.want, got, 0.001) {
 			t.Errorf("%s(%f, %f): want %f, got %f",
 				fnName, tc.a, tc.b, tc.want, got)
 		}
 	}
+}
+
+func RunFunctionInvalidTestCases(tcs []testCase, fn func(a, b float64) (float64, error), t *testing.T) {
+	fnName := GetFunctionName(fn)
+	for _, tc := range tcs {
+		_, err := fn(tc.a, tc.b)
+		if err == nil {
+			t.Errorf("%s(%f, %f): want error for invalid input, got nil",
+				fnName, tc.a, tc.b)
+		}
+	}
+}
+
+func closeEnough(a, b, tolerance float64) bool {
+	return math.Abs(a-b) <= tolerance
 }
 
 func TestAdd(t *testing.T) {
@@ -78,5 +94,14 @@ func TestDivideValidTestCases(t *testing.T) {
 		{a: -3, b: 1, want: -3},
 		{a: 12, b: 3, want: 4},
 	}
-	RunFunctionTestCasesWithErrors(testCases, calculator.Divide, t)
+	RunFunctionValidTestCases(testCases, calculator.Divide, t)
+}
+
+func TestDivideInvalid(t *testing.T) {
+	t.Parallel()
+	// want is meaningless here, so setting to 0
+	testCases := []testCase{
+		{a: 2, b: 0, want: 0},
+	}
+	RunFunctionInvalidTestCases(testCases, calculator.Divide, t)
 }
