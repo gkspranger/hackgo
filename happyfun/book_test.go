@@ -22,9 +22,25 @@ func TestBuy(t *testing.T) {
 		Copies: 2,
 	}
 	want := 1
-	result := happyfun.Buy(b)
+	result, err := happyfun.Buy(b)
+	if err != nil {
+		t.Fatal(err)
+	}
 	got := result.Copies
 	if want != got {
 		t.Errorf("started with %d, wanted %d, got %d", b.Copies, want, got)
+	}
+}
+
+func TestBuyErrorIfOutOfStock(t *testing.T) {
+	t.Parallel()
+	b := happyfun.Book{
+		Title:  "Spark Joy",
+		Author: "Marie Kondo",
+		Copies: 0,
+	}
+	_, err := happyfun.Buy(b)
+	if err == nil {
+		t.Errorf("started with %d, should have reported as out of stock", b.Copies)
 	}
 }
