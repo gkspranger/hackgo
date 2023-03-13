@@ -3,6 +3,8 @@ package happyfun_test
 import (
 	"happyfun"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 func TestBook(t *testing.T) {
@@ -42,5 +44,20 @@ func TestBuyErrorIfOutOfStock(t *testing.T) {
 	_, err := happyfun.Buy(b)
 	if err == nil {
 		t.Errorf("started with %d, should have reported as out of stock", b.Copies)
+	}
+}
+
+func TestGetAllBooks(t *testing.T) {
+	t.Parallel()
+	catalog := []happyfun.Book{
+		{Title: "For the Love of Go"},
+		{Title: "The Power of Go: Tools"},
+	}
+
+	want := catalog
+	got := happyfun.GetAllBooks(catalog)
+
+	if !cmp.Equal(want, got) {
+		t.Error(cmp.Diff(want, got))
 	}
 }

@@ -18,4 +18,10 @@ go tool cover -html=coverage.out
 
 # AIO coverage file and pretty print
 go test -coverprofile=coverage.out && go tool cover -html=coverage.out
+
+# get some module
+go get "github.com/google/go-cmp/cmp"
+
+# cleanup go.mod for direct references
+go mod tidy
 ```

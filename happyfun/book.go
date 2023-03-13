@@ -1,6 +1,8 @@
 package happyfun
 
-import "errors"
+import (
+	"errors"
+)
 
 type Book struct {
 	Title  string
@@ -19,4 +21,8 @@ func Buy(b Book) (Book, error) {
 func Return(b Book) Book {
 	b.Copies++
 	return b
+}
+
+func GetAllBooks(c []Book) []Book {
+	return c
 }
