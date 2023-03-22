@@ -2,6 +2,7 @@ package happyfun_test
 
 import (
 	"happyfun"
+	"sort"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -58,7 +59,10 @@ func TestBuyErrorIfOutOfStock(t *testing.T) {
 func TestGetAllBooks(t *testing.T) {
 	t.Parallel()
 	want := testableCatalog()
-	got := happyfun.GetAllBooks(testableCatalog())
+	sort.Slice(want, func(i, j int) bool {
+		return want[i].ID < want[j].ID
+	})
+	got := happyfun.GetAllBooks(happyfun.MakeCatalog(want))
 
 	if !cmp.Equal(want, got) {
 		t.Error(cmp.Diff(want, got))
@@ -111,6 +115,22 @@ func TestMakeCatalogMap(t *testing.T) {
 
 	if !cmp.Equal(want, got) {
 		t.Error(cmp.Diff(want, got))
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}
+
+func TestNetPriceCents(t *testing.T) {
+	t.Parallel()
+	b := happyfun.Book{
+		Author:          "greg",
+		Title:           "wawa",
+		PriceCents:      4000,
+		DiscountPercent: 25,
+	}
+	var want = 3000
+	got := b.NetPriceCents()
+
+	if want != got {
 		t.Errorf("wanted %v, got %v", want, got)
 	}
 }
