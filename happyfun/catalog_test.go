@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 func books() []happyfun.Book {
@@ -29,7 +30,7 @@ func TestCatalogGetAllBooks(t *testing.T) {
 	want := books()
 	got := input.GetAllBooks()
 
-	if !cmp.Equal(want, got) {
+	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(happyfun.Book{})) {
 		t.Error(cmp.Diff(want, got))
 	}
 }
@@ -44,7 +45,7 @@ func TestCatalogGetBookValid(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !cmp.Equal(want, got) {
+	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(happyfun.Book{})) {
 		t.Error(cmp.Diff(want, got))
 		t.Errorf("wanted %v, got %v", want, got)
 	}

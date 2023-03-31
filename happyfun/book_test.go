@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 func testableCatalog() []happyfun.Book {
@@ -64,7 +65,7 @@ func TestGetAllBooks(t *testing.T) {
 	})
 	got := happyfun.GetAllBooks(happyfun.MakeCatalog(want))
 
-	if !cmp.Equal(want, got) {
+	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(happyfun.Book{})) {
 		t.Error(cmp.Diff(want, got))
 	}
 }
@@ -86,7 +87,7 @@ func TestGetBookValid(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !cmp.Equal(want, got) {
+	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(happyfun.Book{})) {
 		t.Error(cmp.Diff(want, got))
 		t.Errorf("wanted %v, got %v", want, got)
 	}
@@ -113,7 +114,7 @@ func TestMakeCatalogMap(t *testing.T) {
 
 	got := happyfun.MakeCatalog(catalog)
 
-	if !cmp.Equal(want, got) {
+	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(happyfun.Book{})) {
 		t.Error(cmp.Diff(want, got))
 		t.Errorf("wanted %v, got %v", want, got)
 	}
@@ -132,5 +133,77 @@ func TestNetPriceCents(t *testing.T) {
 
 	if want != got {
 		t.Errorf("wanted %v, got %v", want, got)
+	}
+}
+
+func TestSetPriceCents(t *testing.T) {
+	t.Parallel()
+	b := happyfun.Book{
+		Author:          "greg",
+		Title:           "wawa",
+		PriceCents:      4000,
+		DiscountPercent: 25,
+	}
+	want := 3000
+	err := b.SetPriceCents(3000)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want != b.PriceCents {
+		t.Errorf("wanted %v, got %v", want, b.PriceCents)
+	}
+}
+
+func TestSetPriceCentsInvalid(t *testing.T) {
+	t.Parallel()
+	b := happyfun.Book{
+		Author:          "greg",
+		Title:           "wawa",
+		PriceCents:      4000,
+		DiscountPercent: 25,
+	}
+	err := b.SetPriceCents(-1)
+
+	if err == nil {
+		t.Fatal("an error should have been returned for a bad value")
+	}
+}
+
+func TestBookCategory(t *testing.T) {
+	t.Parallel()
+	b := happyfun.Book{
+		Author:          "greg",
+		Title:           "wawa",
+		PriceCents:      4000,
+		DiscountPercent: 25,
+	}
+	want := "romance"
+	err := b.SetCategory(want)
+	got := b.Category()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}
+
+func TestBookSetCategoryInvalid(t *testing.T) {
+	t.Parallel()
+	b := happyfun.Book{
+		Author:          "greg",
+		Title:           "wawa",
+		PriceCents:      4000,
+		DiscountPercent: 25,
+	}
+	want := "failme"
+	err := b.SetCategory(want)
+
+	if err == nil {
+		t.Fatal(err)
 	}
 }
