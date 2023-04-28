@@ -171,7 +171,7 @@ func TestSetPriceCentsInvalid(t *testing.T) {
 	}
 }
 
-func TestBookCategory(t *testing.T) {
+func TestBookSetCategory(t *testing.T) {
 	t.Parallel()
 	b := happyfun.Book{
 		Author:          "greg",
@@ -179,16 +179,24 @@ func TestBookCategory(t *testing.T) {
 		PriceCents:      4000,
 		DiscountPercent: 25,
 	}
-	want := "romance"
-	err := b.SetCategory(want)
-	got := b.Category()
-
-	if err != nil {
-		t.Fatal(err)
+	cats := []happyfun.Category{
+		happyfun.CategoryBiography,
+		happyfun.CategoryRomance,
+		happyfun.CategoryScience,
 	}
 
-	if want != got {
-		t.Errorf("wanted %v, got %v", want, got)
+	for _, cat := range cats {
+		want := cat
+		err := b.SetCategory(cat)
+		got := b.Category()
+
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if want != got {
+			t.Errorf("wanted %v, got %v", want, got)
+		}
 	}
 }
 
@@ -200,10 +208,10 @@ func TestBookSetCategoryInvalid(t *testing.T) {
 		PriceCents:      4000,
 		DiscountPercent: 25,
 	}
-	want := "failme"
-	err := b.SetCategory(want)
+	var category happyfun.Category = -1
+	err := b.SetCategory(category)
 
 	if err == nil {
-		t.Fatal(err)
+		t.Errorf("should have failed using category %v", category)
 	}
 }

@@ -6,6 +6,20 @@ import (
 	"sort"
 )
 
+type Category int
+
+const (
+	CategoryScience Category = iota
+	CategoryRomance
+	CategoryBiography
+)
+
+var validCategory = map[Category]bool{
+	CategoryBiography: true,
+	CategoryRomance:   true,
+	CategoryScience:   true,
+}
+
 type Book struct {
 	Title           string
 	Author          string
@@ -13,7 +27,7 @@ type Book struct {
 	ID              int
 	PriceCents      int
 	DiscountPercent int
-	category        string
+	category        Category
 }
 
 func (b Book) NetPriceCents() int {
@@ -30,15 +44,15 @@ func (b *Book) SetPriceCents(price int) error {
 	return nil
 }
 
-func (b *Book) SetCategory(category string) error {
-	if category != "romance" {
-		return fmt.Errorf("this sucks")
+func (b *Book) SetCategory(category Category) error {
+	if !validCategory[category] {
+		return fmt.Errorf("category is invalid")
 	}
 	b.category = category
 	return nil
 }
 
-func (b Book) Category() string {
+func (b Book) Category() Category {
 	return b.category
 }
 
