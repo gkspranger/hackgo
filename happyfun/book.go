@@ -115,3 +115,41 @@ func Bigger(x, y int) int {
 func Xor(x, y bool) bool {
 	return x != y
 }
+
+func Greet(name string) string {
+	switch name {
+	case "alice":
+		return "hey alice"
+	case "bob":
+		return "hello bob"
+	default:
+		return "hi stranger"
+	}
+}
+
+func Total(numbers []int) int {
+	sum := 0
+	for _, v := range numbers {
+		sum += v
+	}
+	return sum
+}
+
+func Evens() {
+	for i := 0; i <= 10; i++ {
+		if i%2 == 0 {
+			fmt.Println(i)
+		}
+	}
+}
+
+func NonNegative(nums []int) []int {
+	var keep []int
+	for _, v := range nums {
+		if v < 0 {
+			continue
+		}
+		keep = append(keep, v)
+	}
+	return keep
+}

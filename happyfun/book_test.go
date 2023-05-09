@@ -248,3 +248,58 @@ func TestXorFalse(t *testing.T) {
 		t.Errorf("wanted %v, got %v", want, got)
 	}
 }
+
+func TestGreetBob(t *testing.T) {
+	t.Parallel()
+	want := "hello bob"
+	got := happyfun.Greet("bob")
+
+	if want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}
+
+func TestGreetAlice(t *testing.T) {
+	t.Parallel()
+	want := "hey alice"
+	got := happyfun.Greet("alice")
+
+	if want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}
+
+func TestGreetDefault(t *testing.T) {
+	t.Parallel()
+	want := "hi stranger"
+	got := happyfun.Greet("greg")
+
+	if want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}
+
+func TestTotal(t *testing.T) {
+	t.Parallel()
+	want := 6
+	got := happyfun.Total([]int{1, 2, 3})
+
+	if want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}
+
+func TestEvens(t *testing.T) {
+	t.Parallel()
+	happyfun.Evens()
+}
+
+func TestNonNegative(t *testing.T) {
+	t.Parallel()
+	want := []int{0, 2}
+	got := happyfun.NonNegative([]int{-1, 0, -4, 2})
+
+	if !cmp.Equal(want, got) {
+		t.Error(cmp.Diff(want, got))
+	}
+}
