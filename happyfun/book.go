@@ -104,3 +104,14 @@ func NetPriceCents(book Book) int {
 	saving := book.PriceCents * book.DiscountPercent / 100
 	return book.PriceCents - saving
 }
+
+func Bigger(x, y int) int {
+	if y > x {
+		return y
+	}
+	return x
+}
+
+func Xor(x, y bool) bool {
+	return x != y
+}

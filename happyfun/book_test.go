@@ -215,3 +215,36 @@ func TestBookSetCategoryInvalid(t *testing.T) {
 		t.Errorf("should have failed using category %v", category)
 	}
 }
+
+func TestBigger(t *testing.T) {
+	t.Parallel()
+	want := 2
+	got := happyfun.Bigger(1, 2)
+
+	if want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}
+
+func TestXorTrue(t *testing.T) {
+	t.Parallel()
+	want := true
+	got := happyfun.Xor(true, false)
+
+	if want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}
+
+func TestXorFalse(t *testing.T) {
+	t.Parallel()
+	want := false
+
+	if got := happyfun.Xor(false, false); want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+
+	if got := happyfun.Xor(true, true); want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}
