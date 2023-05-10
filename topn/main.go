@@ -36,18 +36,20 @@ func CmdArgs() Args {
 	}
 }
 
+func PrintError(msg string) {
+	fmt.Printf("ERROR: %v\n\n", msg)
+	PrintDefaultArgs()
+}
+
 func ValidateCmdArgs(args Args) {
 	_, err := script.IfExists(args.Path).String()
 	switch {
 	case args.Path == "":
-		fmt.Printf("ERROR: file path flag is empty\n\n")
-		PrintDefaultArgs()
+		PrintError("file path flag is empty")
 	case err != nil:
-		fmt.Printf("ERROR: file path does not exist\n\n")
-		PrintDefaultArgs()
+		PrintError("file path does not exist")
 	case args.Numbers <= 0:
-		fmt.Printf("ERROR: largest N numbers is <= 0\n\n")
-		PrintDefaultArgs()
+		PrintError("largest N numbers is <= 0")
 	default:
 		break
 	}
@@ -61,11 +63,15 @@ func FileHandler(path string) *os.File {
 	return file
 }
 
-type NumberSet struct {
-	highest [10]int
+type numberSet struct {
+	highest []int
 }
 
-func (n *NumberSet) ReplaceWhenGreaterThan(num int) {
+func NewNumberSet(size int) numberSet {
+	return numberSet{highest: make([]int, size)}
+}
+
+func (n *numberSet) ReplaceWhenGreaterThan(num int) {
 	for i, v := range n.highest {
 		if num < v {
 			continue
@@ -75,7 +81,7 @@ func (n *NumberSet) ReplaceWhenGreaterThan(num int) {
 	}
 }
 
-func (n *NumberSet) PrintHighest() {
+func (n *numberSet) PrintHighest() {
 	s := n.highest[:]
 	sort.Slice(s, func(i, j int) bool {
 		return s[i] > s[j]
@@ -85,8 +91,8 @@ func (n *NumberSet) PrintHighest() {
 	}
 }
 
-func ParseFile(handler *os.File) NumberSet {
-	ns := NumberSet{}
+func ParseFile(size int, handler *os.File) numberSet {
+	ns := NewNumberSet(size)
 	scanner := bufio.NewScanner(handler)
 	for scanner.Scan() {
 		i, err := strconv.Atoi(scanner.Text())
@@ -105,7 +111,7 @@ func main() {
 	handler := FileHandler(args.Path)
 	defer handler.Close()
 
-	ns := ParseFile(handler)
+	ns := ParseFile(args.Numbers, handler)
 
 	ns.PrintHighest()
 }
