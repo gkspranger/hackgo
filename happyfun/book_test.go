@@ -303,3 +303,37 @@ func TestNonNegative(t *testing.T) {
 		t.Error(cmp.Diff(want, got))
 	}
 }
+
+func TestWithdrawValid(t *testing.T) {
+	t.Parallel()
+	want := 9
+	got, err := happyfun.Withdraw(10, 1)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}
+
+func TestWithdrawIValid(t *testing.T) {
+	t.Parallel()
+	_, err := happyfun.Withdraw(10, 11)
+
+	if err == nil {
+		t.Fatal(err)
+	}
+}
+
+func TestApply(t *testing.T) {
+	t.Parallel()
+	want := 2
+	got := happyfun.Apply(1, func(x int) int {
+		return x * 2
+	})
+
+	if want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}

@@ -77,7 +77,7 @@ func (n *numberSet) ReplaceWhenGreaterThan(num int) {
 			continue
 		}
 		n.highest[i] = num
-		break
+		return
 	}
 }
 

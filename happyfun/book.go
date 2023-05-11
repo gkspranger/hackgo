@@ -153,3 +153,14 @@ func NonNegative(nums []int) []int {
 	}
 	return keep
 }
+
+func Withdraw(balance, amount int) (int, error) {
+	if amount > balance {
+		return 0, errors.New("amount is greater than balance")
+	}
+	return balance - amount, nil
+}
+
+func Apply(num int, f func(int) int) int {
+	return f(num)
+}
