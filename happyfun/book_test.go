@@ -337,3 +337,33 @@ func TestApply(t *testing.T) {
 		t.Errorf("wanted %v, got %v", want, got)
 	}
 }
+
+func TestAddManyZero(t *testing.T) {
+	t.Parallel()
+	want := 0
+	got := happyfun.AddMany()
+
+	if want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}
+
+func TestAddManyOne(t *testing.T) {
+	t.Parallel()
+	want := 1
+	got := happyfun.AddMany(1)
+
+	if want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}
+
+func TestAddManyThree(t *testing.T) {
+	t.Parallel()
+	want := 6
+	got := happyfun.AddMany(1, 2, 3)
+
+	if want != got {
+		t.Errorf("wanted %v, got %v", want, got)
+	}
+}

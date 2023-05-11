@@ -164,3 +164,10 @@ func Withdraw(balance, amount int) (int, error) {
 func Apply(num int, f func(int) int) int {
 	return f(num)
 }
+
+func AddMany(nums ...int) (sum int) {
+	for _, v := range nums {
+		sum += v
+	}
+	return sum
+}
