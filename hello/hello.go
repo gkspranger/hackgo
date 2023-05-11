@@ -1,10 +1,25 @@
 package hello
 
 import (
-	"bytes"
 	"fmt"
+	"io"
+	"os"
 )
 
-func PrintTo(buf *bytes.Buffer) {
-	fmt.Fprint(buf, "Hello, World!")
+type Printer struct {
+	Output io.Writer
+}
+
+func NewPrinter() *Printer {
+	return &Printer{
+		Output: os.Stdout,
+	}
+}
+
+func (p *Printer) Print() {
+	fmt.Fprint(p.Output, "Hello, World!\n")
+}
+
+func Print() {
+	NewPrinter().Print()
 }
