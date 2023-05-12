@@ -47,6 +47,7 @@ func TestPrintsNextMessageToWriter(t *testing.T) {
 	c := hello.NewCounter()
 	c.Output = fakeTerminal
 	c.MaxIterations = 1
+	c.Sleep = 0
 	c.Run()
 	want := "0\n"
 	got := fakeTerminal.String()
@@ -61,6 +62,7 @@ func TestPrintsManyNextMessageToWriter(t *testing.T) {
 	c := hello.NewCounter()
 	c.Output = fakeTerminal
 	c.MaxIterations = 3
+	c.Sleep = 0
 	c.Run()
 	want := "0\n1\n2\n"
 	got := fakeTerminal.String()

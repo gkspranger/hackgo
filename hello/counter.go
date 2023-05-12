@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 )
 
 type Counter struct {
 	Value         int
 	Output        io.Writer
 	MaxIterations int
+	Sleep         int
 }
 
 func (c *Counter) Next() int {
@@ -24,6 +26,7 @@ func (c *Counter) Print() {
 func (c *Counter) Run() {
 	for i := 0; i < c.MaxIterations; i++ {
 		c.Next()
+		time.Sleep(time.Duration(c.Sleep) * time.Second)
 		c.Print()
 	}
 }
@@ -33,5 +36,6 @@ func NewCounter() *Counter {
 		Value:         -1,
 		Output:        os.Stdout,
 		MaxIterations: 1_000_000_000_000,
+		Sleep:         10 * 60,
 	}
 }
