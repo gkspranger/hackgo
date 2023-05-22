@@ -4,3 +4,5 @@ use ./happyfun
 use ./calculator
 use ./topn
 use ./hello
+use ./count
+use ./searchme
